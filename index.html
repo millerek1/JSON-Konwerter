@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Konwerter</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            text-align: center;
+            max-width: 800px;
+            width: 90%;
+        }
+        textarea {
+            width: 100%;
+            margin-top: 10px;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        img {
+            max-width: 100px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="logo.png" alt="Logo" id="logo">
+        <h1>JSON Konwerter</h1>
+        <textarea id="inputJSON" placeholder="Wklej swój JSON tutaj..." rows="15" cols="70"></textarea>
+        <br>
+        <button onclick="convertJSON()">Konwertuj</button>
+        <h2>Wynik:</h2>
+        <textarea id="outputJSON" rows="15" cols="70" readonly></textarea>
+    </div>
+
+    <script>
+        function convertJSON() {
+            let input = document.getElementById('inputJSON').value;
+            try {
+                let inputData = JSON.parse(input);
+                if (inputData.Objects && Array.isArray(inputData.Objects)) {
+                    let outputData = inputData.Objects.map(item => {
+                        return {
+                            "VehicleType": item.name,
+                            "Position": item.pos,
+                            "Orientation": item.ypr
+                        };
+                    });
+                    document.getElementById('outputJSON').value = JSON.stringify(outputData, null, 4);
+                } else {
+                    document.getElementById('outputJSON').value = "Wprowadzony JSON nie zawiera prawidłowej tablicy `Objects`.";
+                }
+            } catch (e) {
+                document.getElementById('outputJSON').value = "Błąd podczas przetwarzania JSON: " + e.message;
+            }
+        }
+    </script>
+</body>
+</html>
